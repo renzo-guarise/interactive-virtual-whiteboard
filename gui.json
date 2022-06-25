@@ -1,0 +1,51 @@
+{
+    "NW":{
+        "icon_path":"icons/arrow-left-white.png",
+        "description":"back",
+        "name":"back"
+    },
+    "NE":{
+        "icon_path":"icons/delete-white.png",
+        "description":"limpiar pantalla",
+        "name":"clean"
+    },
+    "N":[
+        {
+            "icon_path":"icons/progress-question-white.png",
+            "description":"preguntas",
+            "name":"questions"
+        },
+        {
+            "icon_path":"icons/pencil-white.png",
+            "description":"dibujo guiado",
+            "name":"draw"
+        },
+        {
+            "icon_path":"icons/run-fast-white.png",
+            "description":"juego",
+            "name":"game"
+        },
+        {
+            "icon_path":"icons/gesture-white.png",
+            "description":"dibujo libre",
+            "name":"freedraw"
+        }
+    ],
+    "W":[
+        {
+            "icon_path":"icons/format-line-weight-white.png",
+            "description":"Grosor",
+            "name":"thickness"
+        },
+        {
+            "icon_path":"icons/palette-outline-white.png",
+            "description":"Color",
+            "name":"color"
+        }
+    ],
+    "SE":{
+        "icon_path":"icons/exit-to-app-white.png",
+        "description":"salir",
+        "name":"exit"
+    }
+}

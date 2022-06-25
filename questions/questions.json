@@ -1,0 +1,23 @@
+{
+    "correct_logo":"questions/answers/check-decagram.png",
+    "incorrect_logo":"questions/answers/close-circle.png",
+    "animales":{
+        "question":"Como se dice @animal en Ingles?",
+        "images":"questions/animals",
+        "max_options":3,
+        "languages":[
+            "ingles","español"
+        ],
+        "lista":[
+            ["bat","murcielago"],
+            ["bird","pajaro"],
+            ["cat","gato"],
+            ["dog","perro"],
+            ["duck","pato"],
+            ["fish","pez"],
+            ["pig","cerdo"],
+            ["rabbit","conejo"],
+            ["snake","serpiente"]
+        ]
+    }
+}

@@ -1,0 +1,5 @@
+opencv-python
+numpy
+# simpleaudio
+# playsound
+pygame
