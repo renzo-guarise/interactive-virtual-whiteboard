@@ -3,3 +3,4 @@ numpy
 # simpleaudio
 # playsound
 pygame
+pybluez2
