@@ -10,19 +10,26 @@ import cv2
 import numpy as np
 
 import bluetooth # pybluez - 3.9
-
-# import simpleaudio as sa
-# from playsound import playsound
 from pygame import mixer
 
 
 class MyPlayer(threading.Thread):
 
+    """
+    Clase para la reproduccion de sonidos. Permite la reproduccion de sonidos cuando un marcador se posiciona sobre una de las teclas del 
+    juego "Simon", si hay un sonido reproduciendose evita su reproducción. Esta clase hereda de la clase Thread para la creación de hilos y 
+    agrega la clase mixer para la reproducción de sonidos.
+    """
     num_players = 0
     players = []
     time_sleep = 0.8
 
     def __init__(self):
+
+        """
+        Función de inicializacion de la clase
+        """
+
         threading.Thread.__init__(self)
         self.id_player = MyPlayer.num_players
         
@@ -36,43 +43,65 @@ class MyPlayer(threading.Thread):
 
     def play(self,sound_name: str=None) -> None:
 
+        """
+        Función para la inicializacion del hilo y posterior reproduccion de sonidos mediante la función run()
+        """
+
         threading.Thread.__init__(self)
 
         if sound_name != None and type(sound_name) == type(""):
-            # print("Modificando sonido")
+            
             self.sound_name = sound_name
             self.mixer.music.load(self.sound_name)
 
         if self.is_playing():
-            # print("Ignoring")
+            
             return None
+
         else:
+
             self.playing = True
             self.start()
 
     def run(self):
-        
+
+        """
+        Función para reproducir sonidos mediante el hilo.
+        """
+
         try:
-            # print("reproduciendo")
+            
             self.mixer.music.play()
+
         except:
+
             pass
-            # print("Error tratando de reproducir:",self.sound_name)
+            
         time.sleep(0.5)
-        
-        # print("Fin sonido")
         self.playing = False
             
     def is_playing(self) -> bool:
-        return self.playing #and self.mixer.get_busy()
+
+        """
+        Función que verifica si se esta reproduciendo un sonido
+        """
+
+        return self.playing
 
 class InteractivePen(threading.Thread):
+
+    """
+    Clase para la realizar la conexión via bluetooth del marcador. La clase hereda de la clase Thread para realizar el proceso de busqueda 
+    y conexión en un hilo, de esta manera la interación bluetooth se realiza de manera paralela al proceso permitiendo que la aplicación corra
+    de manera fluida. Se agra la clase bluetooth para la conexión
+    """
 
     num_connections = 0
     auto_recognize_device = "RV"
     time_sleep = 0.8
 
     def __init__(self): # Constructor
+
         threading.Thread.__init__(self)
         self.id_connection = InteractivePen.num_connections
         self.connected = False
@@ -113,6 +142,9 @@ class InteractivePen(threading.Thread):
 
     def run(self):
 
+        """
+        Función que se corre dentro del hilo.
+        """
         with bluetooth.BluetoothSocket() as self.sock: #bluetooth.RFCOMM
     
             try:
@@ -158,38 +190,34 @@ class InteractivePen(threading.Thread):
         self.sock.close()
 
 def draw_border(img, pt1, pt2, color, thickness, r, d):
-        x1,y1 = pt1
-        x2,y2 = pt2
-        # Top left
-        cv2.line(img, (x1 + r, y1), (x1 + r + d, y1), color, thickness)
-        cv2.line(img, (x1, y1 + r), (x1, y1 + r + d), color, thickness)
-        cv2.ellipse(img, (x1 + r, y1 + r), (r, r), 180, 0, 90, color, thickness)
-        # Top right
-        cv2.line(img, (x2 - r, y1), (x2 - r - d, y1), color, thickness)
-        cv2.line(img, (x2, y1 + r), (x2, y1 + r + d), color, thickness)
-        cv2.ellipse(img, (x2 - r, y1 + r), (r, r), 270, 0, 90, color, thickness)
-        # Bottom left
-        cv2.line(img, (x1 + r, y2), (x1 + r + d, y2), color, thickness)
-        cv2.line(img, (x1, y2 - r), (x1, y2 - r - d), color, thickness)
-        cv2.ellipse(img, (x1 + r, y2 - r), (r, r), 90, 0, 90, color, thickness)
-        # Bottom right
-        cv2.line(img, (x2 - r, y2), (x2 - r - d, y2), color, thickness)
-        cv2.line(img, (x2, y2 - r), (x2, y2 - r - d), color, thickness)
-        cv2.ellipse(img, (x2 - r, y2 - r), (r, r), 0, 0, 90, color, thickness)
+
+    """
+    Función para resaltar los bordes sobre los que pasa el marcador.
+    """
+
+    x1,y1 = pt1
+    x2,y2 = pt2
+    # Top left
+    cv2.line(img, (x1 + r, y1), (x1 + r + d, y1), color, thickness)
+    cv2.line(img, (x1, y1 + r), (x1, y1 + r + d), color, thickness)
+    cv2.ellipse(img, (x1 + r, y1 + r), (r, r), 180, 0, 90, color, thickness)
+    # Top right
+    cv2.line(img, (x2 - r, y1), (x2 - r - d, y1), color, thickness)
+    cv2.line(img, (x2, y1 + r), (x2, y1 + r + d), color, thickness)
+    cv2.ellipse(img, (x2 - r, y1 + r), (r, r), 270, 0, 90, color, thickness)
+    # Bottom left
+    cv2.line(img, (x1 + r, y2), (x1 + r + d, y2), color, thickness)
+    cv2.line(img, (x1, y2 - r), (x1, y2 - r - d), color, thickness)
+    cv2.ellipse(img, (x1 + r, y2 - r), (r, r), 90, 0, 90, color, thickness)
+    # Bottom right
+    cv2.line(img, (x2 - r, y2), (x2 - r - d, y2), color, thickness)
+    cv2.line(img, (x2, y2 - r), (x2, y2 - r - d), color, thickness)
+    cv2.ellipse(img, (x2 - r, y2 - r), (r, r), 0, 0, 90, color, thickness)
 
 def add_obj(background, img, mask, x, y):
+
     '''
-    Arguments:
-    background - background image in CV2 RGB format
-    img - image of object in CV2 RGB format
-    mask - mask of object in CV2 RGB format
-    x, y - coordinates of the center of the object image
-    0 < x < width of background
-    0 < y < height of background
-    
-    Function returns background with added object in CV2 RGB format
-    
-    CV2 RGB format is a numpy array with dimensions width x height x 3
+    Función para agregar objetos a la pantalla
     '''
     
     bg = background.copy()
@@ -198,7 +226,6 @@ def add_obj(background, img, mask, x, y):
     
     h, w = img.shape[0], img.shape[1]
     
-    # Calculating coordinates of the top left corner of the object image
     x = x - int(w/2)
     y = y - int(h/2)    
     
@@ -207,8 +234,8 @@ def add_obj(background, img, mask, x, y):
     
     if x >= 0 and y >= 0:
     
-        h_part = h - max(0, y+h-h_bg) # h_part - part of the image which overlaps background along y-axis
-        w_part = w - max(0, x+w-w_bg) # w_part - part of the image which overlaps background along x-axis
+        h_part = h - max(0, y+h-h_bg)
+        w_part = w - max(0, x+w-w_bg) 
 
         bg[y:y+h_part, x:x+w_part, :] = bg[y:y+h_part, x:x+w_part, :] * ~mask_rgb_boolean[0:h_part, 0:w_part, :] + (img * mask_rgb_boolean)[0:h_part, 0:w_part, :]
         
@@ -236,6 +263,7 @@ def add_obj(background, img, mask, x, y):
     return bg
 
 class VirtualBoard():
+    
     
     _OBJECT_DETECTION_PARAMETERS_FILE = "detection_params.json"
     _OBJECT_DETECTION_PARAMETERS = {"low": {"H": 34, "S": 50, "V": 42}, "high": {"H": 100, "S": 213, "V": 249}}
