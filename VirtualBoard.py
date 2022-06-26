@@ -264,6 +264,9 @@ def add_obj(background, img, mask, x, y):
 
 class VirtualBoard():
     
+    """
+    Clase principal del programa. Agrega la clase cv2, clase de visión artificial que permite el reconocimiento del marcador.
+    """
     
     _OBJECT_DETECTION_PARAMETERS_FILE = "detection_params.json"
     _OBJECT_DETECTION_PARAMETERS = {"low": {"H": 34, "S": 50, "V": 42}, "high": {"H": 100, "S": 213, "V": 249}}
@@ -378,39 +381,7 @@ class VirtualBoard():
             self.BT_Pen = InteractivePen()
             self.BT_Pen.initialize()
         except:
-            pass
-        
-        """
-        # Collect events until released
-        # with keyboard.Listener(
-        #         on_press=on_press,
-        #         on_release=on_release) as listener:
-        #     listener.join()
-
-        # ...or, in a non-blocking fashion:
-        # self.listener = keyboard.Listener(
-        #     on_press=self.on_press,
-        #     on_release=self.on_release)
-        # self.listener.start()
-        """
-
-    """
-    # Key events
-    def on_press(self,key):
-        try:
-            print('alphanumeric key {0} pressed'.format(
-                key.char))
-        except AttributeError:
-            print('special key {0} pressed'.format(
-                key))
-
-    def on_release(self,key):
-        print('{0} released'.format(
-            key))
-        if key == keyboard.Key.esc:
-            # Stop listener
-            return False
-    """
+            pass    
 
     def cursor_simon(self,cursor):
 
@@ -448,6 +419,7 @@ class VirtualBoard():
                 return True
 
     def draw_simon(self,fill="",reprod=True):
+
         """draw_simon
             Esta funcion dibuja en la pantalla el juego del simon y tambien puede pintar algun cuadrante.
             Esto se hace con fill = "g", "r", "b" o "y" según el color a pintar
@@ -483,28 +455,15 @@ class VirtualBoard():
 
         # elimino el centro
         cv2.circle(self.canvas_imAux,(VirtualBoard.centro_x,VirtualBoard.centro_y),VirtualBoard.radio_int-self.marker_thickness,(0,0,0),-1) # borramos lo pintado que haya al medio
-
-
-        # que tengo que devolver o hacer para finalizar??
-
+       
     def draw_camera(self):
         pass
 
     def draw_gui(self):
         
         self.t_drawing_gui = time.time()
+
         for menu in self.menu_list:
-            # cv2.rectangle(self.frame,
-            # (
-            #     menu["x"],
-            #     menu["y"]
-            # ),
-            # (
-            #     menu["x"]+menu["size"],
-            #     menu["y"]+menu["size"]
-            # ),
-            # menu["color"],
-            # VirtualBoard.THICKNESS["medium"])
 
             src = menu["icon"]
             y1 = menu["y"]
@@ -514,29 +473,9 @@ class VirtualBoard():
 
             self.frame[y1:y2, x1:x2] = self.frame[y1:y2, x1:x2] * (1 - src[:, :, 3:] / 255) + src[:, :, :3] * (src[:, :, 3:] / 255)
 
-        
         self.t_drawing_gui = time.time() - self.t_drawing_gui
+
         return False
-        #------------------------ Sección Superior ------------------------------------------
-        # Cuadrados dibujados en la parte superior izquierda (representan el color a dibujar)
-        cv2.rectangle(self.frame,(0,0),(50,50),VirtualBoard.COLOR["yellow"],VirtualBoard.THICKNESS["normal"])
-        cv2.rectangle(self.frame,(50,0),(100,50),VirtualBoard.COLOR["pink"],VirtualBoard.THICKNESS["normal"])
-        cv2.rectangle(self.frame,(100,0),(150,50),VirtualBoard.COLOR["green"],VirtualBoard.THICKNESS["normal"])
-        cv2.rectangle(self.frame,(150,0),(200,50),VirtualBoard.COLOR["cyan"],VirtualBoard.THICKNESS["normal"])
-
-        # Rectángulo superior central, que nos ayudará a limpiar la pantalla
-        cv2.rectangle(self.frame,(300,0),(400,50),colorLimpiarPantalla,1)
-        cv2.putText(self.frame,'Limpiar',(320,20),6,0.6,colorLimpiarPantalla,1,cv2.LINE_AA)
-        cv2.putText(self.frame,'pantalla',(320,40),6,0.6,colorLimpiarPantalla,1,cv2.LINE_AA)
-
-        # Cuadrados dibujados en la parte superior derecha (grosor del marcador para dibujar)
-        cv2.rectangle(self.frame,(490,0),(540,50),(0,0,0),grosorPeque)
-        cv2.circle(self.frame,(515,25),3,(0,0,0),-1)
-        cv2.rectangle(self.frame,(540,0),(590,50),(0,0,0),grosorMedio)
-        cv2.circle(self.frame,(565,25),7,(0,0,0),-1)
-        cv2.rectangle(self.frame,(590,0),(640,50),(0,0,0),grosorGrande)
-        cv2.circle(self.frame,(615,25),11,(0,0,0),-1)
-        #-----------------------------------------------------------------------------------
         
     def object_detection(self):
         
@@ -555,25 +494,12 @@ class VirtualBoard():
             if area > 800:
                 x,y2,w,h = cv2.boundingRect(c)
                 x2 = x + w//2
-
-                # Corner detection
-                # img = cv2.imread('edges.png')
-                # gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                # gray = np.float32(gray)
-                # dst = cv2.cornerHarris(gray,5,3,0.04)
-                # ret, dst = cv2.threshold(dst,0.1*dst.max(),255,0)
-                # dst = np.uint8(dst)
-                # ret, labels, stats, centroids = cv2.connectedComponentsWithStats(dst)
-                # criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 100, 0.001)
-                # corners = cv2.cornerSubPix(gray,np.float32(centroids),(5,5),(-1,-1),criteria)
-                # for i in range(1, len(corners)):
-                # 	print(corners[i])
-                # img[dst>0.1*dst.max()]=[0,0,255]
-                
                 cv2.circle(self.frame,(x2,y2),self.marker_thickness,self.marker_color,3)
                 self.x1 = x2
                 self.y1 = y2
+
             else:
+
                 self.x1, self.y1 = None, None
 
         # para devolver --> cursor_detected, cursor_position, cursor_key
@@ -699,10 +625,6 @@ class VirtualBoard():
                 except:
                     # print("No mouse position detected")
                     break
-
-        # elif menu == "shape":
-        #     # desplegar las formas esto es opcional
-        #     pass
 
         elif menu == "questions":
 
@@ -928,13 +850,6 @@ class VirtualBoard():
             # si acierta sumo punto y avanzo sino paso esa pregunta al final y sigo preguntando.
             pass
         
-        elif menu == "draw":
-            pass
-            # dibujo sobre un lienzo, al terminar el dibujo paso el lienzo a reconocimiento
-            # es linea, cuadrado, circulo o triangulo?? obtener limites, bordes, areas y demas
-            # inserto en otro lienzo el dibujo mejorado y vuelvo a esperar otro dibujo
-            pass
-        
         elif menu == "game":
 
             self.canvas_imAux = np.zeros(self.frame.shape,dtype=np.uint8)
@@ -1082,8 +997,7 @@ class VirtualBoard():
                         self.marker_thickness,
                         cv2.LINE_AA
                     )
-                    # print("Fin del juego")    
-            
+                             
         elif menu == "freedraw":
 
 
@@ -1110,12 +1024,6 @@ class VirtualBoard():
         
         elif self.active_menu == None:
             self.draw_status = None
-            # self.question_status = None
-
-            # RESET GAME OPTIONS
-            # self.game_status = None # si estamos jugando o no
-    
-    # hacer, deshacer, volver atras
 
     def menu_creation(self):
         
@@ -1248,19 +1156,6 @@ class VirtualBoard():
         
         self.t_menu_creation = time.time() - self.t_menu_creation
 
-# =======================================
-
-    def cursor_action(self):
-        pass
-
-    def configure_marker(self):
-        pass
-
-    def show_message(self):
-        pass
-
-# =======================================
-
     def end_board(self):
         
         self.BT_Pen.disconnect()
@@ -1271,9 +1166,6 @@ class VirtualBoard():
     def start_board(self):
         self.running = True
         while self.running:
-
-            # if not self.BT_Pen.status:
-            #     self.BT_Pen.initialize()
 
             # Obtenemos la imagen de la cámara
             ret,self.frame = self.cap.read()
