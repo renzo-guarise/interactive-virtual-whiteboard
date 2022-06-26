@@ -16,11 +16,6 @@
             "name":"questions"
         },
         {
-            "icon_path":"icons/pencil-white.png",
-            "description":"dibujo guiado",
-            "name":"draw"
-        },
-        {
             "icon_path":"icons/run-fast-white.png",
             "description":"juego",
             "name":"game"

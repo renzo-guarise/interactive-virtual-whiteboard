@@ -131,3 +131,5 @@ dmypy.json
 # My ignores
 object_detection/
 venv2/
+
+VE/

@@ -678,6 +678,7 @@ class VirtualBoard():
 
         elif menu == "questions":
 
+            self.canvas_imAux = np.zeros(self.frame.shape,dtype=np.uint8)
             # trabajamos con 3 variables
             # question_status -> Boolean
             # question_list -> List[Dict]
@@ -907,6 +908,8 @@ class VirtualBoard():
             pass
         
         elif menu == "game":
+
+            self.canvas_imAux = np.zeros(self.frame.shape,dtype=np.uint8)
             
             # Estados del juego (jugando o no, mostrando secuencia, escuchando secuencia)
             # jugamos al simon
@@ -1023,8 +1026,8 @@ class VirtualBoard():
                                 # for _ in range(3):
                                 aleat = self.game_options[randint(0,len(self.game_options)-1)]
                                 # ver que no se repita mas de dos veces
-                                if len(self.game_simon)>2:
-                                    while aleat == self.game_simon[-1] and aleat == self.game_simon[-2]:
+                                if len(self.game_simon)>0:
+                                    while aleat == self.game_simon[-1] :
                                         aleat = self.game_options[randint(0,len(self.game_options)-1)]
                                 self.game_simon.append(aleat)
 
@@ -1051,10 +1054,10 @@ class VirtualBoard():
                         self.marker_thickness,
                         cv2.LINE_AA
                     )
-                    # print("Fin del juego")
-            
+                    # print("Fin del juego")    
             
         elif menu == "freedraw":
+
 
             if cursor_key == ord("d"):
                 self.draw_status = True
@@ -1284,9 +1287,12 @@ class VirtualBoard():
                     self.game_status = None
                     # self.game_simon = None
                     # self.game_answer = None
-
+                    self.prev_menu = self.active_menu 
                     self.active_menu = menu_name
                     self.active_menu_id = menu_id
+
+                    if self.prev_menu == "game" and self.active_menu == "freedraw":
+                         self.canvas_imAux = np.zeros(self.frame.shape,dtype=np.uint8)
 
                 # # Si no estoy sobre un menu entonces tengo que dibujar o algo
                 # self.cursor_action(cursor_position) # las acciones dependep del menu
