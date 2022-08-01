@@ -36,6 +36,11 @@
             "icon_path":"icons/palette-outline-white.png",
             "description":"Color",
             "name":"color"
+        },
+        {
+            "icon_path":"icons/content-save-all.png",
+            "description":"Guardar",
+            "name":"save"
         }
     ],
     "SE":{

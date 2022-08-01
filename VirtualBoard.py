@@ -1,7 +1,10 @@
 import os
+from sqlite3 import Timestamp
 import time
 import json
 import threading
+
+from datetime import date, datetime
 
 from os.path import join
 from random import randint, shuffle
@@ -166,7 +169,7 @@ class InteractivePen(threading.Thread):
                     data = data.decode("utf-8")
                     if data.find("1") >= 0:
                         self.new_data = True
-                        self.data = "b" # mayor prioridad es simular "b"
+                        self.data = "s" # mayor prioridad es simular "s"
                     elif data.find("2") >= 0:
                         self.new_data = True
                         self.data = "d" # segundo es "d"
@@ -596,7 +599,6 @@ class VirtualBoard():
                 except:
                     # print("No mouse position detected")
                     break
-            # tomo la posicion
 
         elif menu == "thickness":
             # desplegar los grosores
@@ -625,6 +627,12 @@ class VirtualBoard():
                 except:
                     # print("No mouse position detected")
                     break
+
+        elif menu == "save":
+            # guardar imagen
+            time_stamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+            cv2.imwrite(f"capturas/save_{time_stamp}_canvas.png",self.canvas_imAux)
+            cv2.imwrite(f"capturas/save_{time_stamp}_frame.png",self.frame)
 
         elif menu == "questions":
 
