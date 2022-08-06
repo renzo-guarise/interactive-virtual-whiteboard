@@ -279,8 +279,8 @@ class VirtualBoard():
     GUI_thickness = 2 # ancho en px de los trazos
     GUI_separation = 10
     GUI_iconsize = 52
-    GUI_height = 480 # 720, 480
-    GUI_width = 720 # 1080, 720
+    GUI_height = 720 # 720, 480
+    GUI_width = 1080 # 1080, 720
 
     # Colores para pintar
     COLOR = {

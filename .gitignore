@@ -133,3 +133,4 @@ object_detection/
 venv2/
 
 VE/
+*.png
